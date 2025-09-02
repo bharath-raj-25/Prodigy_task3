@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+body {
+  background: linear-gradient(135deg, #181c27 0%, #222831 100%);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Orbitron', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  text-align: center;
+  background: rgba(25, 29, 41, 0.98);
+  padding: 40px 30px 30px 30px;
+  border-radius: 24px;
+  box-shadow: 0 12px 32px 0 #11131a, 0 1.5px 4px 0 #000 inset;
+  position: relative;
+  z-index: 1;
+}
+
+/* Blinking header */
+.game-title {
+  color: #ff1a1a;
+  font-size: 3rem;
+  text-shadow: 0 0 12px #ff1a1a, 0 0 24px #ff0000;
+  margin-bottom: 18px;
+  letter-spacing: 2px;
+  animation: blink 1.5s infinite alternate;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; text-shadow: 0 0 12px #ff1a1a, 0 0 24px #ff0000; }
+  50% { opacity: 0.6; text-shadow: 0 0 6px #ff4d4d, 0 0 12px #ff1a1a; }
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 90px);
+  grid-template-rows: repeat(3, 90px);
+  gap: 16px;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+  perspective: 600px;
+  background: #1a1a1a;
+  border-radius: 18px;
+  box-shadow:
+    0 0 20px #ff0000,
+    inset 0 0 10px #660000;
+}
+
+.square {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(145deg, #2a1a1a 60%, #1a0f0f 100%);
+  border-radius: 14px;
+  box-shadow:
+    0 6px 18px #330000,
+    inset 0 1.5px 4px #990000;
+  font-size: 3rem;
+  color: #ff4d4d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.16s cubic-bezier(.4,2,.6,1),
+    box-shadow 0.3s,
+    background 0.3s;
+  font-family: 'Orbitron', Arial, sans-serif;
+  user-select: none;
+  backface-visibility: hidden;
+  position: relative;
+  z-index: 0;
+}
+
+.square:hover {
+  transform: scale(1.1) rotateY(10deg);
+  background: linear-gradient(145deg, #ff0000 10%, #2a1a1a 80%);
+  box-shadow:
+    0 0 30px #ff0000,
+    inset 0 0 15px #ff4d4d;
+  z-index: 2;
+}
+
+.square.X {
+  color: #ff1a1a;
+  text-shadow: 0 0 16px #ff1a1a, 0 2px 0 #330000;
+  animation: pulseRed 1.2s infinite alternate;
+}
+
+.square.O {
+  color: #ff6666;
+  text-shadow: 0 0 16px #ff6666, 0 2px 0 #330000;
+  animation: pulseRedLight 1.2s infinite alternate;
+}
+
+@keyframes pulseRed {
+  0% { text-shadow: 0 0 16px #ff1a1a, 0 2px 0 #330000; }
+  100% { text-shadow: 0 0 32px #ff4d4d, 0 2px 0 #660000; }
+}
+
+@keyframes pulseRedLight {
+  0% { text-shadow: 0 0 16px #ff6666, 0 2px 0 #330000; }
+  100% { text-shadow: 0 0 28px #ff9999, 0 2px 0 #660000; }
+}
+
+.square.winner {
+  background: linear-gradient(145deg, #ffcc00 40%, #ff0000 100%);
+  color: #1a1a1a;
+  box-shadow:
+    0 0 40px #ffcc00,
+    inset 0 1.5px 8px #ff0000;
+  animation: winnerGlow 1.2s ease-in-out infinite alternate;
+  z-index: 3;
+}
+
+@keyframes winnerGlow {
+  0% { box-shadow: 0 0 40px #ffcc00, inset 0 1.5px 8px #ff0000; }
+  100% { box-shadow: 0 0 80px #ffcc00, inset 0 3px 16px #ff0000; }
+}
+
+#message {
+  color: #ffcc00;
+  font-size: 2rem;
+  margin: 18px 0 10px 0;
+  min-height: 32px;
+  text-shadow: 0 2px 8px #330000;
+}
+
+/* Reset button */
+#reset {
+  background: linear-gradient(90deg, #ff0000 0%, #990000 100%);
+  color: #fff;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 36px;
+  margin-top: 12px;
+  box-shadow: 0 2px 12px #ff0000;
+  cursor: pointer;
+  font-family: 'Orbitron', Arial, sans-serif;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.15s;
+}
+
+#reset:hover {
+  background: linear-gradient(90deg, #990000 0%, #ff0000 100%);
+  transform: scale(1.05);
+}
+
+/* Popup Modal styles */
+.popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.popup.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.popup-content {
+  background: #1a0f0f;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow:
+    0 0 30px #ff0000,
+    inset 0 0 15px #660000;
+  text-align: center;
+  position: relative;
+  width: 320px;
+  max-width: 90vw;
+  color: #ff3333;
+  font-family: 'Orbitron', sans-serif;
+  user-select: none;
+}
+
+.popup-content h2 {
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+  text-shadow: 0 0 10px #ff0000;
+}
+
+/* Close button */
+#close-popup {
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 12px #ff0000;
+  transition: background 0.3s;
+}
+
+#close-popup:hover {
+  background: #cc0000;
+}
+
+/* Confetti container */
+.confetti-container {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Confetti pieces */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  background-color: #ff0000;
+  opacity: 0.9;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+  filter: drop-shadow(0 0 3px #ff4d4d);
+}
+
+/* Different colors for confetti */
+.confetti:nth-child(2n) { background-color: #ff4d4d; }
+.confetti:nth-child(3n) { background-color: #ff9999; }
+.confetti:nth-child(4n) { background-color: #cc0000; }
+
+/* Confetti fall animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120px) rotate(360deg);
+    opacity: 0;
+  }
+}
